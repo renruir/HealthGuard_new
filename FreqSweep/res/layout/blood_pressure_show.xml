@@ -1,0 +1,109 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" 
+    >
+
+     <FrameLayout  
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="30dp"
+        >
+        
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/title2_bg"
+            android:fitsSystemWindows="true"
+            android:scaleType="centerCrop"
+            android:id="@+id/title_bg_bloodpressure"
+             />
+        
+        <ImageButton android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/bloodpressure_arrow"
+            android:src="@drawable/arrow_fold"
+            android:layout_gravity="right"
+            android:background="#00000000"
+            />
+        
+    </FrameLayout >
+    
+       <LinearLayout android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/bloodpressure_detail"
+        android:visibility="gone"
+        >
+        
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dip">
+        
+        <TextView android:text="舒张压："
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/title_ext"
+            android:layout_marginLeft="24dp"
+            android:layout_width="wrap_content"/>
+        
+        <TextView android:id="@+id/high"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+             style="@style/title_ext"
+            android:layout_weight="2"/>        
+    </LinearLayout>
+    
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dip">
+        
+        <TextView android:text="伸缩压："
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="24dp"
+             style="@style/title_ext"
+            android:layout_weight="1"/>
+        
+        <TextView android:id="@+id/low"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+             style="@style/title_ext"
+            android:layout_weight="2"/>
+        
+    </LinearLayout>
+    
+       <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dip"
+        android:layout_marginBottom="20dip"
+        >
+        
+        <ImageButton 
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/btn_start_bloodpressure"
+            android:background="#00000000"
+            android:id="@+id/start_blood_test"/>
+        
+        <ImageButton 
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:src="@drawable/btn_save_bloodpressure"
+            android:layout_weight="1"
+            android:background="#00000000"
+            android:id="@+id/save_blood_test_result"/>"
+        
+    </LinearLayout>
+        
+    </LinearLayout>
+    
+    
+</LinearLayout>
+    
