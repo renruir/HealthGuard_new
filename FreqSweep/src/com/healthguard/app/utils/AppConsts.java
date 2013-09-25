@@ -5,13 +5,13 @@ import java.text.SimpleDateFormat;
 import android.net.Uri;
 
 public class AppConsts {
-	
+	//
 	public static final String TABLE_BLOODPRESSURE = "bloodpressure";
 	
 	public static final String TABLE_TEMPERATURE = "temperature";
 	
 	public static final String TABLE_WEIGHT = "weight";
-	
+	//
 	public static final String Value_Pressure_high = "pressure_high";
 	
 	public static final String Value_Pressure_low = "pressure_low";
@@ -31,17 +31,29 @@ public class AppConsts {
 	public static final int WEIGHT = 300;
 	public static final int WEIGHT_ID = 301;
 	
-	public static final String AUTHORITY = "umich.framjack.apps.freqsweep.data";
+	//
+	public static final String databasePah = "/mnt/sdcard/health/userData.db";
+	
+	public static final String AUTHORITY = "com.healthguard.app.utils";
 	
 	public static final Uri AUTHORITY_URI = Uri.parse("content://" + AUTHORITY);
-	
+	//URI
 	public static final Uri BLOODPRESSURE_URI = Uri.withAppendedPath(AUTHORITY_URI, TABLE_BLOODPRESSURE);
 	
 	public static final Uri TEMPERATURE_URI = Uri.withAppendedPath(AUTHORITY_URI, TABLE_TEMPERATURE);
 	
 	public static final Uri WEIGHT_URI = Uri.withAppendedPath(AUTHORITY_URI, TABLE_WEIGHT);
 	
-
+	//
+	public static final int MSG_PRESSSURE = 0;
+	
+	public static final int MSG_HEARTBEAT = 1;
+	
+	public static final int MSG_TEMPERATURE = 2;
+	
+	public static final int MSG_WEIGHT = 3;
+	
+	//
 	public static String getCurrentTime(){
 		SimpleDateFormat    sDateFormat  = new SimpleDateFormat("yyyy-MM-dd    hh:mm:ss");       
 		String  date  =  sDateFormat.format(new    java.util.Date());   

@@ -21,21 +21,13 @@
             android:id="@+id/title_bg_bloodpressure"
              />
         
-        <ImageButton android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/bloodpressure_arrow"
-            android:src="@drawable/arrow_fold"
-            android:layout_gravity="right"
-            android:background="#00000000"
-            />
-        
     </FrameLayout >
     
        <LinearLayout android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/bloodpressure_detail"
-        android:visibility="gone"
+        android:visibility="visible"
         >
         
     <LinearLayout android:layout_width="match_parent"
@@ -57,10 +49,6 @@
             android:text="100"
             android:layout_weight="1"/>        
             
-        <ImageView android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/heart"/>
     </LinearLayout>
     
     <LinearLayout android:layout_width="match_parent"
@@ -82,14 +70,27 @@
             android:text="100"
             android:layout_weight="1"/>
         
-        <TextView android:id="@+id/heartnum"
+    </LinearLayout>
+    
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="15dip">
+        
+        <TextView android:text="心率："
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            style="@style/title_ext"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"/>
+        
+        <TextView android:id="@+id/heart_rate"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             style="@style/title_ext"
             android:text="100"
-            android:gravity="center"
-            android:layout_weight="1"/>
-        
+            android:layout_weight="1"/>        
+            
     </LinearLayout>
     
        <LinearLayout android:layout_width="match_parent"

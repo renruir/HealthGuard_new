@@ -3,6 +3,7 @@ package com.healthguard.app;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.healthguard.app.HealthManagerActivity.HeartTimerTask;
 import com.healthguard.app.utils.AppConsts;
 
 import umich.framjack.core.FramingEngine;
@@ -21,18 +22,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class HealthManagerActivity extends Activity{
+public class BloodPressureActivity extends Activity{
 	
-	public final static String TAG = "HealthManager";
+	private final static String TAG = "BloodPressureActivity";
 	
-	private SerialDecoder _serialDecoder;
-	private FramingEngine _framer;
-	
-	private boolean _nextFlag = false;
+	private SerialDecoder serialDecoder;
+	private FramingEngine framer;
 	
 	private int _pendingTransmitBytes=1;
 	private byte[] _sendByteBuff;
@@ -43,42 +40,27 @@ public class HealthManagerActivity extends Activity{
 	
 	private short[] _RxWeightShortBuff;
 	private short[] _RxTempShortBuff;
-	private float refVol = (float) 3.2;
-	
-	private short iHeartNum=0;
-	
-	private ImageButton bloodPressureFold;
-	private ImageButton temperatureFold;
-	private ImageButton weightFold;
-	
-	private ImageButton bloodPressureMeasureStart;
-	private ImageButton bloodPressureSave;
-	private ImageButton bodytemperatureSave;
-	private ImageButton bodyweightSave;
-	
-	private ImageView titleBgBloodpressure;
-	private ImageView titleBgTemperature;
-	private ImageView titleBgWeight;
-	
-	private TextView bloodPressureHigh;
-	private TextView bloodPressureLow;
-	private TextView heartBeatNumber;
-	private TextView bodyTemperature;
-	private TextView bodyWeight;
-	
-	private LinearLayout bloodpressure_detail;
-	private LinearLayout temperature_detail;
-	private LinearLayout weight_detail;
 	
 	private short iHeartNumFirst;
 	private short iHeartNumSecond;
 	private boolean iStartHeartTimerFlag = true;	
-	private short iHeartEdgeFlag=0;	
+	private short iHeartEdgeFlag=0;
 	
 	
+	//读数
+	private TextView bloodPressureHigh;
+	private TextView bloodPressureLow;
+	private TextView heartBeatNumber;
+	
+	//按键
+	private ImageButton bloodPressureMeasureStart;
+	private ImageButton bloodPressureSave;
 	
 	private Timer mTimer = new Timer(); 
 	private HeartTimerTask mHeartTimerTask;
+	
+	private short iHeartNum=0;
+	
 	
 	class HeartTimerTask extends TimerTask{
 		
@@ -108,52 +90,31 @@ public class HealthManagerActivity extends Activity{
 				heartBeatNumber.setText(msg.arg1+"次/分钟");
 				//timeTask.cancel();
 			}
-			else if(msg.what == AppConsts.MSG_TEMPERATURE){
-				
-				float vol = (float) 0.0;
-				float Rvalue= (float) 0.0;
-				vol = (float) ((((float)msg.arg1*2.5)/(float)4096) - (refVol/11));
-				Rvalue = (110000*vol)/refVol;
-				
-				double temperatrue,temp;
-				
-				temp = (double) (((float)(0.00025316) * (Math.log(Rvalue/50000))) + (1/298.15));//0.00025316=1/3950
-				temp = 1/temp;
-				
-				temperatrue = (float) (temp - 273.15);
-				bodyTemperature.setText(temperatrue +"摄氏度");
-
-			}
-			else if(msg.what == AppConsts.MSG_WEIGHT){
-				bodyWeight.setText(msg.arg1+"KG");
-
-			}
 			
 		}
 		
 	};
 	
 
-	//测试一下是否收到
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.health);
-		initView();
+		setContentView(R.layout.activity_blood_pressure);
+		
+		bloodPressureHigh = (TextView)findViewById(R.id.high);
+		bloodPressureLow = (TextView)findViewById(R.id.low);
+		heartBeatNumber = (TextView)findViewById(R.id.heartnum);
+		
+		bloodPressureMeasureStart = (ImageButton)findViewById(R.id.start_blood_test);
+		bloodPressureSave = (ImageButton)findViewById(R.id.save_blood_test_result);
+		
 		initButtonClick();
-        
-		_framer = new FramingEngine();
-		_serialDecoder = new SerialDecoder();
+		
+		framer = new FramingEngine();
+		serialDecoder = new SerialDecoder();
 		
 		_sendByteBuff = new byte[8];
-		
-		_RxAcShortBuff = new short[10];
-		_RxDcShortBuff = new short[10];
-		_RxWeightShortBuff = new short[10];
-		_RxTempShortBuff = new short[10];
-
 		
 		_sendByteBuff[0]=0x01;
 		_sendByteBuff[1]=0x7c;
@@ -164,120 +125,35 @@ public class HealthManagerActivity extends Activity{
 		_sendByteBuff[6]=0x27;
 		_sendByteBuff[7]=0x18;
 		
-		
-		_serialDecoder.registerBytesAvailableListener(_bytesAvailableListener);
-		_serialDecoder.registerByteSentListener(_byteSentListener);
-		_framer.registerIncomingPacketListener(_incomingPacketListener);
-		_framer.registerOutgoingByteListener(_outgoingByteListener);	
-
+		serialDecoder.registerBytesAvailableListener(bytesAvailableListener);
+		serialDecoder.registerByteSentListener(_byteSentListener);
+		framer.registerIncomingPacketListener(_incomingPacketListener);
+		framer.registerOutgoingByteListener(_outgoingByteListener);	
 		
 	}
 	
-	private void initView(){
-		bloodPressureFold =  (ImageButton)findViewById(R.id.bloodpressure_arrow);
-		temperatureFold = (ImageButton)findViewById(R.id.temperature_arrow);
-		weightFold = (ImageButton)findViewById(R.id.weight_arrow);
-		
-		bloodPressureMeasureStart = (ImageButton)findViewById(R.id.start_blood_test);
-		bloodPressureSave = (ImageButton)findViewById(R.id.save_blood_test_result);
-		bodytemperatureSave = (ImageButton)findViewById(R.id.save_temperature_record);
-		bodyweightSave = (ImageButton)findViewById(R.id.save_weight_record);
-		
-		titleBgBloodpressure = (ImageView)findViewById(R.id.title_bg_bloodpressure);
-		titleBgTemperature = (ImageView)findViewById(R.id.title_bg_temperature);
-		titleBgWeight = (ImageView)findViewById(R.id.title_bg_weight);
-		
-		bloodPressureHigh = (TextView)findViewById(R.id.high);
-		bloodPressureLow = (TextView)findViewById(R.id.low);
-		heartBeatNumber = (TextView)findViewById(R.id.heartnum);
-		bodyTemperature = (TextView)findViewById(R.id.temperature);
-		bodyWeight = (TextView)findViewById(R.id.bodyWeight);
-		
-		bloodpressure_detail = (LinearLayout)findViewById(R.id.bloodpressure_detail);
-		temperature_detail = (LinearLayout)findViewById(R.id.temperature_detail);
-		weight_detail = (LinearLayout)findViewById(R.id.weight_detail);
-	}
-
+	
 	private void initButtonClick(){
-		
-		titleBgBloodpressure.setOnClickListener(bloodPressureClick);
-		bloodPressureFold.setOnClickListener(bloodPressureClick);
-		
-		titleBgTemperature.setOnClickListener(temperatureClick);
-		temperatureFold.setOnClickListener(temperatureClick);
-		
-		titleBgWeight.setOnClickListener(weightClick);
-		weightFold.setOnClickListener(weightClick);
-		
-		bloodPressureSave.setOnClickListener(bloodPressureSaveValue);
-		
+		bloodPressureMeasureStart.setOnClickListener(bloodPressureMeasureStartListener);
+		bloodPressureSave.setOnClickListener(bloodPressureSaveValueListener);
 	}
 	
-	private  OnClickListener bloodPressureClick = new OnClickListener() {
+	private OnClickListener bloodPressureMeasureStartListener = new OnClickListener() {
 		
 		@Override
 		public void onClick(View v) {
-			_sendByteBuff[0]=0x55;
-			_sendByteBuff[1]=0x01;
-			_sendByteBuff[2]=0x01;
 			// TODO Auto-generated method stub
-			if((bloodpressure_detail.getVisibility() ==  View.INVISIBLE)||(bloodpressure_detail.getVisibility() ==  View.GONE)){
-				bloodpressure_detail.setVisibility(View.VISIBLE);
-				bloodPressureFold.setImageResource(R.drawable.arrow_unfold);
-			}
-			else if((bloodpressure_detail.getVisibility() ==  View.VISIBLE)){
-				bloodpressure_detail.setVisibility(View.GONE);
-				bloodPressureFold.setImageResource(R.drawable.arrow_fold);
-			}
+			
 		}
 	};
 	
-	private  OnClickListener temperatureClick = new OnClickListener() {
-
-		@Override
-		public void onClick(View v) {
-				_sendByteBuff[0]=0x55;
-				_sendByteBuff[1]=0x01;
-				_sendByteBuff[2]=0x03;
-			// TODO Auto-generated method stub
-			if((temperature_detail.getVisibility() ==  View.INVISIBLE)||(temperature_detail.getVisibility() ==  View.GONE)){
-				temperature_detail.setVisibility(View.VISIBLE);
-				temperatureFold.setImageResource(R.drawable.arrow_unfold);
-			}
-			else if((temperature_detail.getVisibility() ==  View.VISIBLE)){
-				temperature_detail.setVisibility(View.GONE);
-				temperatureFold.setImageResource(R.drawable.arrow_fold);
-			}
-		}
-		
-	};
-	
-	private  OnClickListener weightClick = new OnClickListener() {
-
-		@Override
-		public void onClick(View v) {
-				_sendByteBuff[0]=0x55;
-				_sendByteBuff[1]=0x01;
-				_sendByteBuff[2]=0x02;
-			// TODO Auto-generated method stub
-			if((weight_detail.getVisibility() ==  View.INVISIBLE)||(weight_detail.getVisibility() ==  View.GONE)){
-				weight_detail.setVisibility(View.VISIBLE);
-				weightFold.setImageResource(R.drawable.arrow_unfold);
-			}
-			else if((weight_detail.getVisibility() ==  View.VISIBLE)){
-				weight_detail.setVisibility(View.GONE);
-				weightFold.setImageResource(R.drawable.arrow_fold);
-			}
-		}
-		
-	};
-	
-	private OnClickListener bloodPressureSaveValue = new OnClickListener() {
+	private OnClickListener bloodPressureSaveValueListener = new OnClickListener() {
 		
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			Uri uri = AppConsts.BLOODPRESSURE_URI;
+			System.out.println("<----uri  is ---->"+uri);
 			ContentValues value = new ContentValues();
 			value.put("_id", AppConsts.getCurrentTime());
 			value.put(AppConsts.Value_Pressure_high, 120);
@@ -288,44 +164,59 @@ public class HealthManagerActivity extends Activity{
 	};
 	
 	
-	
 	///////////////////////////////////////////////
 	// Listeners
 	///////////////////////////////////////////////	
 	private OutgoingByteListener _outgoingByteListener = new OutgoingByteListener() {
 		public void OutgoingByteTransmit(int[] outgoingRaw) {
-			synchronized (HealthManagerActivity.this) {
+			synchronized (BloodPressureActivity.this) {
 				_pendingTransmitBytes += outgoingRaw.length;
 			}
 			
 			for (int i = 0; i < outgoingRaw.length; i++) {
-				_serialDecoder.sendByte(outgoingRaw[i]);
+				serialDecoder.sendByte(outgoingRaw[i]);
 			}
 		}
 	};
 	
-	private OnBytesAvailableListener _bytesAvailableListener = new OnBytesAvailableListener() {
+	
+	private OnByteSentListener _byteSentListener = new OnByteSentListener() {
+		public void onByteSent() {
+			synchronized (BloodPressureActivity.this) {
+				_pendingTransmitBytes--;
+				if (_pendingTransmitBytes == 0) {
+					
+					for (int i = 0; i < _sendByteBuff.length; i++) {
+						framer.transmitByte(_sendByteBuff[i]);
+					}
+					framer.transmitEnd();
+				}
+			}	
+		}
+	};
+	
+	private OnBytesAvailableListener bytesAvailableListener = new OnBytesAvailableListener() {
 		public void onBytesAvailable(int count) {
 //			Log.i(TAG, "===>onBytesAvailable");
 			while(count > 0) {
-				int byteVal = _serialDecoder.readByte();
+				int byteVal = serialDecoder.readByte();
 				//System.out.println("Received: " + byteVal);
-				_framer.receiveByte(byteVal);
+				framer.receiveByte(byteVal);
 				count--;
 			}
 		}
 	};
 	
-	private OnByteSentListener _byteSentListener = new OnByteSentListener() {
+	private OnByteSentListener byteSentListener = new OnByteSentListener() {
 		public void onByteSent() {
-			synchronized (HealthManagerActivity.this) {
+			synchronized (BloodPressureActivity.this) {
 				_pendingTransmitBytes--;
 				if (_pendingTransmitBytes == 0) {
 					
 					for (int i = 0; i < _sendByteBuff.length; i++) {
-						_framer.transmitByte(_sendByteBuff[i]);
+						framer.transmitByte(_sendByteBuff[i]);
 					}
-					_framer.transmitEnd();
+					framer.transmitEnd();
 				}
 			}	
 		}
@@ -440,6 +331,7 @@ public class HealthManagerActivity extends Activity{
 		}
 	};
 	
+
 	   @Override
 	    public void onPause() {
 //	    	_serialDecoder.stop();
@@ -448,8 +340,8 @@ public class HealthManagerActivity extends Activity{
 	    
 	    @Override
 	    public void onResume() {
-	    	if(!_serialDecoder.isStart){
-	    		_serialDecoder.start();
+	    	if(!serialDecoder.isStart){
+	    		serialDecoder.start();
 	    	}
 	    	super.onResume();
 	    }
@@ -457,7 +349,7 @@ public class HealthManagerActivity extends Activity{
 		@Override
 		protected void onDestroy() {
 			// TODO Auto-generated method stub
-			_serialDecoder.stop();
+			serialDecoder.stop();
 			super.onDestroy();
 		}
 	

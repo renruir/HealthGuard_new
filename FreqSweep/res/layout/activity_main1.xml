@@ -1,0 +1,73 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_screen_bg" >
+  
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:src="@drawable/ic_launcher" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/logo"
+        android:layout_toRightOf="@+id/logo"
+        android:src="@drawable/main_screen_logo" />
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/logo"
+        android:focusable="false"
+        android:layout_marginTop="20dp"
+        android:focusableInTouchMode="false" >
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vPager"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:focusableInTouchMode="false" >
+
+            <ImageView
+                android:id="@+id/set"
+                style="@style/main_button"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/vPager"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/mainscreen_bg_selector"
+                android:clickable="true"
+                android:src="@drawable/main_menu_normal" />
+
+            <ImageView
+                android:id="@+id/two"
+                style="@style/main_button"
+                android:layout_alignLeft="@+id/set"
+                android:layout_below="@+id/set"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/mainscreen_bg_selector"
+                android:clickable="true"
+                android:src="@drawable/main_bg_normal" />
+
+            <ImageView
+                style="@style/main_button"
+                android:layout_alignLeft="@+id/set"
+                android:layout_below="@+id/two"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/mainscreen_bg_selector"
+                android:clickable="true"
+                android:src="@drawable/appmgr_upgrade_edition_brief" />
+        </RelativeLayout>
+    </FrameLayout>
+
+</RelativeLayout>

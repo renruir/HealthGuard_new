@@ -1,0 +1,33 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" 
+	android:layout_height="fill_parent"
+	android:background="@drawable/bg"
+	>
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    
+     >
+     
+  <LinearLayout android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+         android:layout_marginTop="10dp"
+        >
+       <include layout="@layout/blood_pressure_show"
+	   
+	    />
+      </LinearLayout>
+    
+
+	
+  	<include layout="@layout/body_temperature_show"
+  	    android:layout_marginTop="100dp"
+  	    />
+    
+    <include layout="@layout/body_weight_show"/>"
+    
+    </LinearLayout>
+    
+</ScrollView>
