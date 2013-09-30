@@ -32,7 +32,7 @@ public class AppConsts {
 	public static final int WEIGHT_ID = 301;
 	
 	//
-	public static final String databasePah = "/mnt/sdcard/health/userData.db";
+	public static final String databasePath = "/mnt/sdcard/health/userData.db";
 	
 	public static final String AUTHORITY = "com.healthguard.app.utils";
 	

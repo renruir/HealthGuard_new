@@ -1,5 +1,7 @@
 package com.healthguard.app.utils;
 
+import com.healthguard.app.utils.AppConsts;
+
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -43,7 +45,7 @@ public class DataContentProvider extends ContentProvider{
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
 		// TODO Auto-generated method stub
-		sqlDB = SQLiteDatabase.openOrCreateDatabase(AppConsts.databasePah, null);
+		sqlDB = SQLiteDatabase.openOrCreateDatabase(AppConsts.databasePath, null);
 		final int match = matcher.match(uri);
 		int count;
 		switch(match){
@@ -74,7 +76,7 @@ public class DataContentProvider extends ContentProvider{
 		// TODO Auto-generated method stub
 //		sqlDB = dbHelper.getWritableDatabase();
 		Log.i(TAG, "===>insert");
-		sqlDB = SQLiteDatabase.openOrCreateDatabase(AppConsts.databasePah, null);
+		sqlDB = SQLiteDatabase.openOrCreateDatabase(AppConsts.databasePath, null);
 		final int match = matcher.match(uri);
 		long rowId = -1;
 		switch (match) {
@@ -93,7 +95,6 @@ public class DataContentProvider extends ContentProvider{
 		if (rowId > 0) {            
 			Uri rowUri = ContentUris.withAppendedId(uri, rowId);            
 			getContext().getContentResolver().notifyChange(rowUri, null); 
-			sqlDB.close();
 			Log.i(TAG, "===>insert data success");
 			return rowUri;        
 		}
@@ -105,8 +106,9 @@ public class DataContentProvider extends ContentProvider{
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 		// TODO Auto-generated method stub
-		 SQLiteQueryBuilder qb = new SQLiteQueryBuilder();        
-		 sqlDB = SQLiteDatabase.openOrCreateDatabase(AppConsts.databasePah, null); 
+		 Log.i(TAG, "===>query");
+		 SQLiteDatabase sqlDB = SQLiteDatabase.openOrCreateDatabase(AppConsts.databasePath, null); 
+		 SQLiteQueryBuilder qb = new SQLiteQueryBuilder();       
 		 final int match = matcher.match(uri);
 			switch (match) {
 			case AppConsts.BLOODPRESSURE:
@@ -123,7 +125,6 @@ public class DataContentProvider extends ContentProvider{
 			}
 		 Cursor c = qb.query(sqlDB, projection, selection, null, null, null, sortOrder);        
 		 c.setNotificationUri(getContext().getContentResolver(), uri);
-		 sqlDB.close();
 		 return c;
 	}
 
@@ -131,7 +132,7 @@ public class DataContentProvider extends ContentProvider{
 	public int update(Uri uri, ContentValues values, String selection,
 			String[] selectionArgs) {
 		// TODO Auto-generated method stub
-		sqlDB = SQLiteDatabase.openOrCreateDatabase(AppConsts.databasePah, null);
+		sqlDB = SQLiteDatabase.openOrCreateDatabase(AppConsts.databasePath, null);
 		final int match = matcher.match(uri);
 		int rowId = -1;
 		switch (match) {
@@ -149,7 +150,7 @@ public class DataContentProvider extends ContentProvider{
 		}
 		Uri rowUri = ContentUris.withAppendedId(uri, rowId);            
 		getContext().getContentResolver().notifyChange(rowUri, null); 
-		sqlDB.close();
+//		sqlDB.close();
 		return rowId;
 	}
 

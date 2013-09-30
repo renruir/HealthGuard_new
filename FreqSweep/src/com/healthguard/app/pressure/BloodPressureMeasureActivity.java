@@ -1,9 +1,10 @@
-package com.healthguard.app;
+package com.healthguard.app.pressure;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.healthguard.app.HealthManagerActivity.HeartTimerTask;
+import com.healthguard.app.R;
+import com.healthguard.app.pressure.list.BloodPressureListActivity;
 import com.healthguard.app.utils.AppConsts;
 
 import umich.framjack.core.FramingEngine;
@@ -14,19 +15,23 @@ import umich.framjack.core.FramingEngine.IncomingPacketListener;
 import umich.framjack.core.FramingEngine.OutgoingByteListener;
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-public class BloodPressureActivity extends Activity{
+public class BloodPressureMeasureActivity extends Fragment{
 	
-	private final static String TAG = "BloodPressureActivity";
+	private final static String TAG = "BloodPressureMeasureActivity";
 	
 	private SerialDecoder serialDecoder;
 	private FramingEngine framer;
@@ -95,42 +100,78 @@ public class BloodPressureActivity extends Activity{
 		
 	};
 	
+	
+	 public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {  
+		 
+			View view = inflater.inflate(R.layout.activity_blood_pressure, null);
+		    bloodPressureHigh = (TextView)view.findViewById(R.id.high);
+			bloodPressureLow = (TextView)view.findViewById(R.id.low);
+			heartBeatNumber = (TextView)view.findViewById(R.id.heartnum);
+			
+			bloodPressureMeasureStart = (ImageButton)view.findViewById(R.id.start_blood_test);
+			bloodPressureSave = (ImageButton)view.findViewById(R.id.save_blood_test_result);
+			
+			Log.i(TAG, "bloodPressureMeasureStart = "+bloodPressureMeasureStart);
+			
+			initButtonClick();
+			
+			framer = new FramingEngine();
+			serialDecoder = new SerialDecoder();
+			
+			_sendByteBuff = new byte[8];
+			
+			_sendByteBuff[0]=0x01;
+			_sendByteBuff[1]=0x7c;
+			_sendByteBuff[2]=0x23;
+			_sendByteBuff[3]=0x54;
+			_sendByteBuff[4]=0x65;
+			_sendByteBuff[5]=0x76;
+			_sendByteBuff[6]=0x27;
+			_sendByteBuff[7]=0x18;
+			
+			serialDecoder.registerBytesAvailableListener(bytesAvailableListener);
+			serialDecoder.registerByteSentListener(_byteSentListener);
+			framer.registerIncomingPacketListener(_incomingPacketListener);
+			framer.registerOutgoingByteListener(_outgoingByteListener);	
+			
+		 return view; 
+	 }
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_blood_pressure);
-		
-		bloodPressureHigh = (TextView)findViewById(R.id.high);
-		bloodPressureLow = (TextView)findViewById(R.id.low);
-		heartBeatNumber = (TextView)findViewById(R.id.heartnum);
-		
-		bloodPressureMeasureStart = (ImageButton)findViewById(R.id.start_blood_test);
-		bloodPressureSave = (ImageButton)findViewById(R.id.save_blood_test_result);
-		
-		initButtonClick();
-		
-		framer = new FramingEngine();
-		serialDecoder = new SerialDecoder();
-		
-		_sendByteBuff = new byte[8];
-		
-		_sendByteBuff[0]=0x01;
-		_sendByteBuff[1]=0x7c;
-		_sendByteBuff[2]=0x23;
-		_sendByteBuff[3]=0x54;
-		_sendByteBuff[4]=0x65;
-		_sendByteBuff[5]=0x76;
-		_sendByteBuff[6]=0x27;
-		_sendByteBuff[7]=0x18;
-		
-		serialDecoder.registerBytesAvailableListener(bytesAvailableListener);
-		serialDecoder.registerByteSentListener(_byteSentListener);
-		framer.registerIncomingPacketListener(_incomingPacketListener);
-		framer.registerOutgoingByteListener(_outgoingByteListener);	
-		
-	}
+//	@Override
+//	protected void onCreate(Bundle savedInstanceState) {
+//		// TODO Auto-generated method stub
+//		super.onCreate(savedInstanceState);
+//		setContentView(R.layout.activity_blood_pressure);
+//		
+//		bloodPressureHigh = (TextView)findViewById(R.id.high);
+//		bloodPressureLow = (TextView)findViewById(R.id.low);
+//		heartBeatNumber = (TextView)findViewById(R.id.heartnum);
+//		
+//		bloodPressureMeasureStart = (ImageButton)findViewById(R.id.start_blood_test);
+//		bloodPressureSave = (ImageButton)findViewById(R.id.save_blood_test_result);
+//		
+//		initButtonClick();
+//		
+//		framer = new FramingEngine();
+//		serialDecoder = new SerialDecoder();
+//		
+//		_sendByteBuff = new byte[8];
+//		
+//		_sendByteBuff[0]=0x01;
+//		_sendByteBuff[1]=0x7c;
+//		_sendByteBuff[2]=0x23;
+//		_sendByteBuff[3]=0x54;
+//		_sendByteBuff[4]=0x65;
+//		_sendByteBuff[5]=0x76;
+//		_sendByteBuff[6]=0x27;
+//		_sendByteBuff[7]=0x18;
+//		
+//		serialDecoder.registerBytesAvailableListener(bytesAvailableListener);
+//		serialDecoder.registerByteSentListener(_byteSentListener);
+//		framer.registerIncomingPacketListener(_incomingPacketListener);
+//		framer.registerOutgoingByteListener(_outgoingByteListener);	
+//		
+//	}
 	
 	
 	private void initButtonClick(){
@@ -143,7 +184,9 @@ public class BloodPressureActivity extends Activity{
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
-			
+			Intent intent = new Intent();
+			intent.setClass(getActivity(), BloodPressureListActivity.class);
+			startActivity(intent);
 		}
 	};
 	
@@ -159,7 +202,7 @@ public class BloodPressureActivity extends Activity{
 			value.put(AppConsts.Value_Pressure_high, 120);
 			value.put(AppConsts.Value_Pressure_low, 80);
 			value.put(AppConsts.Value_HeartBeat, 75);
-			getContentResolver().insert(uri, value);
+			getActivity().getContentResolver().insert(uri, value);
 		}
 	};
 	
@@ -169,7 +212,7 @@ public class BloodPressureActivity extends Activity{
 	///////////////////////////////////////////////	
 	private OutgoingByteListener _outgoingByteListener = new OutgoingByteListener() {
 		public void OutgoingByteTransmit(int[] outgoingRaw) {
-			synchronized (BloodPressureActivity.this) {
+			synchronized (BloodPressureMeasureActivity.this) {
 				_pendingTransmitBytes += outgoingRaw.length;
 			}
 			
@@ -182,7 +225,7 @@ public class BloodPressureActivity extends Activity{
 	
 	private OnByteSentListener _byteSentListener = new OnByteSentListener() {
 		public void onByteSent() {
-			synchronized (BloodPressureActivity.this) {
+			synchronized (BloodPressureMeasureActivity.this) {
 				_pendingTransmitBytes--;
 				if (_pendingTransmitBytes == 0) {
 					
@@ -209,7 +252,7 @@ public class BloodPressureActivity extends Activity{
 	
 	private OnByteSentListener byteSentListener = new OnByteSentListener() {
 		public void onByteSent() {
-			synchronized (BloodPressureActivity.this) {
+			synchronized (BloodPressureMeasureActivity.this) {
 				_pendingTransmitBytes--;
 				if (_pendingTransmitBytes == 0) {
 					
@@ -346,11 +389,19 @@ public class BloodPressureActivity extends Activity{
 	    	super.onResume();
 	    }
 	    
+	    
 		@Override
-		protected void onDestroy() {
+		public void onDestroyView() {
+			// TODO Auto-generated method stub
+			super.onDestroyView();
+		}
+
+		@Override
+		public void onStop() {
 			// TODO Auto-generated method stub
 			serialDecoder.stop();
-			super.onDestroy();
+			super.onStop();
 		}
+
 	
 }

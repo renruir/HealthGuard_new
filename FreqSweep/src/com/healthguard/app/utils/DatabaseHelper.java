@@ -1,5 +1,7 @@
 package com.healthguard.app.utils;
 
+import com.healthguard.app.utils.AppConsts;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;

@@ -1,0 +1,104 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" 
+    >
+
+     <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/list_title_bg_pressed"
+        >
+    
+    <TextView android:id="@+id/pressure_meausure_time"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="2013-09-26 星期四"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="5dip"
+        />
+    
+    </LinearLayout>
+    
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="5dip"
+        >
+        
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="舒张压："
+            android:layout_weight="1"/>
+        
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/diastolic"
+            android:layout_weight="1"/>
+        
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/diastolic_state"
+            android:text="正常"
+            android:layout_weight="1"/>
+        
+        
+    </LinearLayout>
+    
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="5dip"
+        >
+        
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="收缩压："
+            android:layout_weight="1"/>
+        
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/systolic"
+            android:layout_weight="1"/>
+        
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/systolic_state"
+            android:text="正常"
+            android:layout_weight="1"/>
+        
+      </LinearLayout>
+    
+     <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="5dip"
+        >
+        
+         <TextView android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:text="心    率："/>
+         
+         <TextView android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:id="@+id/list_heart_rate"
+             />
+          <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/list_heart_rate_state"
+            android:text="正常"
+            android:layout_weight="1"/>
+         
+        </LinearLayout>
+    
+</LinearLayout>
+    

@@ -28,6 +28,10 @@
             </intent-filter>
         </activity>
         
+        <activity android:name="com.healthguard.app.pressure.list.BloodPressureListActivity"></activity>
+        
+        <activity android:name="com.healthguard.app.pressure.BloodPressureActivity"></activity>
+        
          <activity android:name="com.healthguard.app.BloodPressureActivity"> </activity>
         
         <activity android:name="com.healthguard.app.BloodPressureShowActivity"> </activity>

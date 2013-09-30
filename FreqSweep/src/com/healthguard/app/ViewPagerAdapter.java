@@ -22,6 +22,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.healthguard.app.pressure.BloodPressureActivity;
+import com.healthguard.app.pressure.BloodPressureMeasureActivity;
 import com.healthguard.app.utils.ImageInfo;
 
 public class ViewPagerAdapter extends PagerAdapter{
@@ -42,7 +44,7 @@ public class ViewPagerAdapter extends PagerAdapter{
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return 2;
+		return 2;//返回页数
 	}
 
 	@Override
