@@ -2,6 +2,7 @@ package com.healthguard.app.pressure;
 
 import com.healthguard.app.R;
 import com.healthguard.app.pressure.list.BloodPressureListActivity;
+import com.healthguard.app.pressure.measure.BloodPressureMeasureActivity;
 
 import android.os.Bundle;
 import android.support.v4.app.*;
@@ -19,10 +20,11 @@ public class BloodPressureActivity extends FragmentActivity  {
 	private FragmentTabHost mTabHost;  
 	private LayoutInflater layoutInflater;  
 	
-	private Class fragmentArray[] = {BloodPressureMeasureActivity.class, BloodPressureListActivity.class};
+	private Class fragmentArray[] = {BloodPressureMeasureActivity.class, BloodPressureListActivity.class, 
+			BloodPressureListActivity.class};
 	
-	private String mTextviewArray[] = {"测量", "记录"};
-	private int mImageViewArray[] = {R.drawable.ic_measure_btn, R.drawable.ic_history_btn};
+	private String mTextviewArray[] = {"测量", "记录", "图形"};
+	private int mImageViewArray[] = {R.drawable.ic_measure_btn, R.drawable.ic_history_btn, R.drawable.ic_graph_btn};
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub

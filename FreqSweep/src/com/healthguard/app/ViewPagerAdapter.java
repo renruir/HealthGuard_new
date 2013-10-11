@@ -23,7 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.healthguard.app.pressure.BloodPressureActivity;
-import com.healthguard.app.pressure.BloodPressureMeasureActivity;
+import com.healthguard.app.pressure.measure.BloodPressureMeasureActivity;
 import com.healthguard.app.utils.ImageInfo;
 
 public class ViewPagerAdapter extends PagerAdapter{

@@ -1,4 +1,4 @@
-package com.healthguard.app.pressure;
+package com.healthguard.app.pressure.measure;
 
 import java.util.Timer;
 import java.util.TimerTask;

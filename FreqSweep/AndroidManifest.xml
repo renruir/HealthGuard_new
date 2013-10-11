@@ -30,7 +30,7 @@
         
         <activity android:name="com.healthguard.app.pressure.list.BloodPressureListActivity"></activity>
         
-        <activity android:name="com.healthguard.app.pressure.BloodPressureActivity"></activity>
+        <activity android:name="com.healthguard.app.pressure.measure.BloodPressureActivity"></activity>
         
          <activity android:name="com.healthguard.app.BloodPressureActivity"> </activity>
         
