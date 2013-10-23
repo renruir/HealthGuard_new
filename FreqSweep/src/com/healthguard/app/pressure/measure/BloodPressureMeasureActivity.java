@@ -199,8 +199,8 @@ public class BloodPressureMeasureActivity extends Fragment{
 			System.out.println("<----uri  is ---->"+uri);
 			ContentValues value = new ContentValues();
 			value.put("_id", AppConsts.getCurrentTime());
-			value.put(AppConsts.Value_Pressure_high, 120);
-			value.put(AppConsts.Value_Pressure_low, 80);
+			value.put(AppConsts.Value_Pressure_high, 130);
+			value.put(AppConsts.Value_Pressure_low, 100);
 			value.put(AppConsts.Value_HeartBeat, 75);
 			getActivity().getContentResolver().insert(uri, value);
 		}

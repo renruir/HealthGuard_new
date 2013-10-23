@@ -1,6 +1,7 @@
 package com.healthguard.app.pressure;
 
 import com.healthguard.app.R;
+import com.healthguard.app.pressure.graph.BloodPressureHistoryGraph;
 import com.healthguard.app.pressure.list.BloodPressureListActivity;
 import com.healthguard.app.pressure.measure.BloodPressureMeasureActivity;
 
@@ -21,7 +22,7 @@ public class BloodPressureActivity extends FragmentActivity  {
 	private LayoutInflater layoutInflater;  
 	
 	private Class fragmentArray[] = {BloodPressureMeasureActivity.class, BloodPressureListActivity.class, 
-			BloodPressureListActivity.class};
+			BloodPressureHistoryGraph.class};
 	
 	private String mTextviewArray[] = {"测量", "记录", "图形"};
 	private int mImageViewArray[] = {R.drawable.ic_measure_btn, R.drawable.ic_history_btn, R.drawable.ic_graph_btn};
