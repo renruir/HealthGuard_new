@@ -12,10 +12,12 @@ import org.achartengine.renderer.XYSeriesRenderer;
 import com.healthguard.app.R;
 import com.healthguard.app.utils.AppConsts;
 
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -32,27 +34,43 @@ public class BloodPressureHistoryGraph extends Fragment{
 	private LinearLayout layout;
 	private XYMultipleSeriesDataset dataSet;
 
+	@SuppressLint("NewApi")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		Log.i(TAG, "BloodPressureHistoryGraph onCreateView ");
-//		View view  = inflater.inflate(R.layout.blood_pressure_history_graph, null);
-//		layout = (LinearLayout)view.findViewById(R.id.line_chart) ;
+		View view  = inflater.inflate(R.layout.blood_pressure_history_graph, null);
+		layout = (LinearLayout)view.findViewById(R.id.line_chart) ;
 		chartView = ChartFactory.getLineChartView(this.getActivity(), getDataSet(), getRenderer());
-//		layout.addView(chartView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-		return chartView;
+//		chartView.setBackgroundResource(R.drawable.bg);
+		chartView.setAlpha((float) 0.5);
+		layout.addView(chartView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		return view;
 	}
 
 	private XYMultipleSeriesDataset  getDataSet(){
 		dataSet = new XYMultipleSeriesDataset();
 		Cursor cursor = getActivity().getContentResolver().query(AppConsts.BLOODPRESSURE_URI, null,  null,  null,  null);
 		XYSeries series_systolic = new XYSeries("systolic");
-		for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-			series_systolic.add(cursor.getFloat(0), cursor.getFloat(1));
+		XYSeries series_diastolic = new XYSeries("diastolic");
+		XYSeries serier_heartBeat = new XYSeries("heartBeat");
+		cursor.moveToFirst();
+		for(int i =0; i < cursor.getCount(); i++){
+			cursor.moveToPosition(i);
+			String systolic = cursor.getString(cursor.getColumnIndex("pressure_high"));
+			series_systolic.add(i, Integer.parseInt(systolic)	);
+			
+			String diastolic = cursor.getString(cursor.getColumnIndex("pressure_low"));
+			series_diastolic.add(i, Integer.parseInt(diastolic));
+			
+			String heartBeat = cursor.getString(cursor.getColumnIndex("heartbeat"));
+			serier_heartBeat.add(i, Integer.parseInt(heartBeat));
 		}
 		
 		dataSet.addSeries(series_systolic);
+		dataSet.addSeries(series_diastolic);
+		dataSet.addSeries(serier_heartBeat);
 		return dataSet;
 	}
 	
@@ -73,6 +91,13 @@ public class BloodPressureHistoryGraph extends Fragment{
 		     r_diastolic.setFillPoints(true);
 		     r_diastolic.setLineWidth(3);
 		     renderer.addSeriesRenderer(1, r_diastolic);
+		     
+		     XYSeriesRenderer r_hreatBeat  = new XYSeriesRenderer();
+		     r_hreatBeat.setColor(Color.YELLOW);
+		     r_hreatBeat.setPointStyle(PointStyle.CIRCLE);
+		     r_hreatBeat.setFillPoints(true);
+		     r_hreatBeat.setLineWidth(3);
+		     renderer.addSeriesRenderer(1, r_hreatBeat);
 		     return renderer;
 	}
 	

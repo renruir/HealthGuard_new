@@ -2,7 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:background="@drawable/main_screen_bg"
+    >
  
     <TextView  android:layout_width="fill_parent"
         android:layout_height="50dp"
@@ -15,7 +17,8 @@
           android:id="@+id/line_chart"
           android:layout_width="fill_parent"
           android:layout_height="wrap_content"
-          android:orientation="vertical">
+          android:orientation="vertical"
+          >
           
       </LinearLayout>
     
