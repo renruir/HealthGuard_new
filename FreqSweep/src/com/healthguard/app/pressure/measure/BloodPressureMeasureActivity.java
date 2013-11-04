@@ -315,30 +315,46 @@ public class BloodPressureMeasureActivity extends Fragment{
 				System.out.println(Integer.toString(_RxAcShortBuff[1]));
 				System.out.println(Integer.toString(_RxAcShortBuff[2]));
 				
-	
-				if(_RxDcShortBuff[0]>1500)//1500 for debug will be replaced
-				{
-					sAvg = (short) ((_RxAcShortBuff[0]+_RxAcShortBuff[1]+_RxAcShortBuff[2])/3);
-					if(sAvg>900)
-						iHeartEdgeFlag = 1;
-					if((iHeartEdgeFlag == 1)&&(sAvg<900))
-					{
-						iHeartEdgeFlag = 0;
-						iHeartNum++;
-						if(iStartHeartTimerFlag){//
-							if(mHeartTimerTask != null)
-							{
-								mHeartTimerTask.cancel();
-							}
-							
-							mHeartTimerTask = new HeartTimerTask();
-							
-							iStartHeartTimerFlag = false;
-							iHeartNumFirst = iHeartNum;
-							mTimer.schedule(mHeartTimerTask, 30*1000); 
-						}
+				long startTime = 0;
+				long endTime = 0;
+				short pulseCount = 0;
+				if(packet[2] == 0xff){//start信号 这个条件你自己设定，我是随意设定的
+					startTime = System.currentTimeMillis();
+					 if(packet[3] == 0xff){
+						 pulseCount++;
+					 }
+				}
+				else{//end信号
+					endTime = System.currentTimeMillis();
+					if(endTime > startTime){
+						long continueTime = endTime - startTime;
+						iHeartNum = (short) ((short)(60/(continueTime/1000))*pulseCount);
 					}
 				}
+	
+//				if(_RxDcShortBuff[0]>1500)//1500 for debug will be replaced
+//				{
+//					sAvg = (short) ((_RxAcShortBuff[0]+_RxAcShortBuff[1]+_RxAcShortBuff[2])/3);
+//					if(sAvg>900)
+//						iHeartEdgeFlag = 1;
+//					if((iHeartEdgeFlag == 1)&&(sAvg<900))
+//					{
+//						iHeartEdgeFlag = 0;
+//						iHeartNum++;
+//						if(iStartHeartTimerFlag){//
+//							if(mHeartTimerTask != null)
+//							{
+//								mHeartTimerTask.cancel();
+//							}
+//							
+//							mHeartTimerTask = new HeartTimerTask();
+//							
+//							iStartHeartTimerFlag = false;
+//							iHeartNumFirst = iHeartNum;
+//							mTimer.schedule(mHeartTimerTask, 30*1000); 
+//						}
+//					}
+//				}
 			}
 			//weight
 			else if(packet[0] == 0xfd)
